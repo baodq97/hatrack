@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/baodq97/hatrack/internal/claude"
 )
@@ -110,7 +111,12 @@ func add(s *claude.Store, name string) error {
 	fmt.Print(addPrompt)
 	var choice string
 	fmt.Scanln(&choice)
-	env := os.Environ()
+	var env []string
+	for _, kv := range os.Environ() {
+		if !strings.HasPrefix(kv, claude.SecureStorageEnv+"=") {
+			env = append(env, kv)
+		}
+	}
 	switch choice {
 	case "1":
 	case "2":
